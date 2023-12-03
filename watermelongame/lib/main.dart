@@ -4,6 +4,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/widgets.dart';
+import 'package:watermelongame/fruit.dart';
 
 void main() {
   runApp(
@@ -17,20 +18,34 @@ class Forge2DExample extends Forge2DGame with PanDetector {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    camera.viewport.add(FpsTextComponent());
-    world.addAll(createBoundaries());
-    world.add(Ball());
+    world.gravity = Vector2(0, 180);
+    world.addAll(_createBoundaries());
+  }
+
+  Vector2 _panPosition = Vector2.zero();
+
+  @override
+  void onPanDown(DragDownInfo info) {
+    _panPosition = info.eventPosition.widget;
+    print(info.raw.localPosition.toVector2());
+    // print(_panPosition);
   }
 
   @override
-  void onPanDown(DragDownInfo info) {}
+  void onPanUpdate(DragUpdateInfo info) {
+    // super.onPanUpdate(info);
+    _panPosition = info.eventPosition.widget;
+    // print(_panPosition);
+  }
 
   @override
   void onPanEnd(DragEndInfo info) {
-    world.add(Ball());
+    // print(_panPosition);
+    // world.add(Fruit(position: _panPosition));
+    world.add(Fruit(position: Vector2(0, 0)));
   }
 
-  List<Component> createBoundaries() {
+  List<Component> _createBoundaries() {
     final visibleRect = camera.visibleWorldRect;
     final topLeft = visibleRect.topLeft.toVector2();
     final topRight = visibleRect.topRight.toVector2();
@@ -43,29 +58,6 @@ class Forge2DExample extends Forge2DGame with PanDetector {
       Wall(bottomLeft, bottomRight),
       Wall(topLeft, bottomLeft),
     ];
-  }
-}
-
-class Ball extends BodyComponent with TapCallbacks {
-  Ball({Vector2? initialPosition})
-      : super(
-          fixtureDefs: [
-            FixtureDef(
-              CircleShape()..radius = 5,
-              restitution: 0.8,
-              friction: 0.4,
-            ),
-          ],
-          bodyDef: BodyDef(
-            angularDamping: 0.8,
-            position: initialPosition ?? Vector2.zero(),
-            type: BodyType.dynamic,
-          ),
-        );
-
-  @override
-  void onTapDown(_) {
-    body.applyLinearImpulse(Vector2.random() * 5000);
   }
 }
 

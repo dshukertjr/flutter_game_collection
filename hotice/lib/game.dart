@@ -64,6 +64,7 @@ class MyGame extends FlameGame with HasCollisionDetection, PanDetector {
     FlameAudio.bgm.stop();
     if (_hasUserInteracted) await FlameAudio.play('lost.wav');
     _isInGame = false;
+    _player.isGameOver = true;
   }
 
   final void Function() onBackToLobby;
@@ -117,6 +118,7 @@ class MyGame extends FlameGame with HasCollisionDetection, PanDetector {
       FlameAudio.bgm.stop();
       if (_hasUserInteracted) FlameAudio.play('won.wav');
       _isInGame = false;
+      _player.isGameOver = true;
     }
   }
 

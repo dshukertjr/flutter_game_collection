@@ -19,6 +19,8 @@ class Player extends PositionComponent with HasGameRef, CollisionCallbacks {
 
   bool canPlaySound = false;
 
+  bool isGameOver = false;
+
   /// Callback for when the player has lost
   ///
   /// Only used if it's my player
@@ -82,6 +84,9 @@ class Player extends PositionComponent with HasGameRef, CollisionCallbacks {
       return;
     }
     if (!isPlayerAlive) {
+      return;
+    }
+    if (isGameOver) {
       return;
     }
     if (other is Ball && other.isFlame) {

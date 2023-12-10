@@ -2,8 +2,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/image_composition.dart' as flame_image;
 
-class Bullet extends PositionComponent with CollisionCallbacks, HasGameRef {
-  final Vector2 velocity = Vector2(0, 150);
+class Ball extends PositionComponent with CollisionCallbacks, HasGameRef {
+  final Vector2 velocity;
 
   final flame_image.Image image;
 
@@ -12,12 +12,13 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasGameRef {
   bool hasBeenHit = false;
 
   /// Whether this is a fire of a snow ball
-  bool isFire;
+  bool isFlame;
 
-  Bullet({
+  Ball({
     required this.image,
     required Vector2 initialPosition,
-    required this.isFire,
+    required this.isFlame,
+    required this.velocity,
   }) : super(position: initialPosition);
 
   @override
